@@ -376,7 +376,8 @@ window.dragDrop=(e)=>{
   const moved=tasks.splice(fromIdx,1)[0];
   tasks.splice(toIdx,0,moved);
   scheduleSave();renderDetail();
-};const el=document.getElementById('proj-title');if(!el)return;const p=projects.find(p=>p.id===id);if(!p)return;const inp=document.createElement('input');inp.className='input';inp.value=p.name;inp.style.fontSize='17px';inp.style.fontWeight='700';inp.style.flex='1';el.replaceWith(inp);inp.focus();const save=()=>{p.name=inp.value.trim()||p.name;scheduleSave();renderAll();};inp.onblur=save;inp.onkeydown=e=>{if(e.key==='Enter')save();};};
+};
+window.editTitle=id=>{const el=document.getElementById('proj-title');if(!el)return;const p=projects.find(p=>p.id===id);if(!p)return;const inp=document.createElement('input');inp.className='input';inp.value=p.name;inp.style.fontSize='17px';inp.style.fontWeight='700';inp.style.flex='1';el.replaceWith(inp);inp.focus();const save=()=>{p.name=inp.value.trim()||p.name;scheduleSave();renderAll();};inp.onblur=save;inp.onkeydown=e=>{if(e.key==='Enter')save();};};
 window.updateProject=(id,field,val)=>{const p=projects.find(p=>p.id===id);if(!p)return;p[field]=val;if(field==='status'&&val==='done')p.priority='completed';if(field==='status'&&val!=='done'&&p.priority==='completed')p.priority='mid';scheduleSave();renderAll();};
 window.deleteProject=id=>{if(!confirm('ลบโปรเจกต์นี้?'))return;projects=dedup(projects.filter(p=>p.id!==id));if(selectedId===id)selectedId=null;scheduleSave();renderAll();};
 window.addTask=pid=>{const inp=document.getElementById('task-input');if(!inp)return;const text=inp.value.trim();if(!text)return;const p=projects.find(p=>p.id===pid);if(!p)return;p.tasks=[...(p.tasks||[]),{id:genId(),text,done:false}];inp.value='';scheduleSave();renderDetail();renderProjList();};
