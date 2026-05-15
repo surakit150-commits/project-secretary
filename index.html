@@ -79,10 +79,14 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .add-row{display:flex;gap:5px;margin-bottom:8px;}
 .task-row{display:flex;align-items:center;gap:7px;padding:5px 0;border-bottom:1px solid #0f0f1a;}
 .task-row.done-row{opacity:.5;}
+.task-row.dragging{opacity:.3;background:var(--bg3);}
+.task-row.drag-over{border-top:2px solid var(--indigo);}
 .task-check{width:15px;height:15px;border-radius:4px;border:2px solid var(--border2);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s;}
 .task-check.done{border-color:var(--indigo);background:var(--indigo);}
-.task-text{flex:1;font-size:12px;}
+.task-text{flex:1;font-size:12px;cursor:text;}
 .task-text.done{color:var(--text3);text-decoration:line-through;}
+.drag-handle{cursor:grab;color:var(--text3);font-size:12px;padding:0 2px;flex-shrink:0;user-select:none;}
+.drag-handle:active{cursor:grabbing;}
 .note-card{padding:7px 9px;border-radius:8px;margin-bottom:5px;background:var(--bg);border:1px solid var(--border);}
 .note-text{font-size:12px;line-height:1.55;color:#c4cad8;margin-bottom:3px;}
 .note-footer{display:flex;justify-content:space-between;align-items:center;}
@@ -313,9 +317,9 @@ function renderDetail(){
         </div>
         <div id="task-list">
           ${!pending.length&&!completed.length?'<div class="empty-hint">ยังไม่มีงาน</div>':''}
-          ${pending.map(t=>`<div class="task-row"><div class="task-check" onclick="toggleTask('${p.id}','${t.id}')"></div><span class="task-text">${esc(t.text)}</span><button class="btn btn-icon" style="color:#374151;padding:1px 5px" onclick="deleteTask('${p.id}','${t.id}')">✕</button></div>`).join('')}
+          ${pending.map(t=>`<div class="task-row" draggable="true" data-tid="${t.id}" data-pid="${p.id}" ondragstart="dragStart(event)" ondragover="dragOver(event)" ondrop="dragDrop(event)" ondragleave="dragLeave(event)" ondragend="dragEnd(event)"><span class="drag-handle">⠿</span><div class="task-check" onclick="toggleTask('${p.id}','${t.id}')"></div><span class="task-text" onclick="editTask('${p.id}','${t.id}',this)">${esc(t.text)}</span><button class="btn btn-icon" style="color:#374151;padding:1px 5px" onclick="deleteTask('${p.id}','${t.id}')">✕</button></div>`).join('')}
           ${completed.length?`<div class="divider-done">✓ เสร็จแล้ว ${completed.length} งาน</div>`:''}
-          ${completed.map(t=>`<div class="task-row done-row"><div class="task-check done" onclick="toggleTask('${p.id}','${t.id}')"><span style="color:#fff;font-size:9px">✓</span></div><span class="task-text done">${esc(t.text)}</span><button class="btn btn-icon" style="color:#374151;padding:1px 5px" onclick="deleteTask('${p.id}','${t.id}')">✕</button></div>`).join('')}
+          ${completed.map(t=>`<div class="task-row done-row"><span class="drag-handle" style="opacity:.3">⠿</span><div class="task-check done" onclick="toggleTask('${p.id}','${t.id}')"><span style="color:#fff;font-size:9px">✓</span></div><span class="task-text done">${esc(t.text)}</span><button class="btn btn-icon" style="color:#374151;padding:1px 5px" onclick="deleteTask('${p.id}','${t.id}')">✕</button></div>`).join('')}
         </div>
       </div>
       <div class="card">
@@ -346,7 +350,33 @@ window.confirmNewProj=()=>{
   projects.unshift(p);selectedId=p.id;document.getElementById('new-proj-form')?.remove();scheduleSave();renderAll();
 };
 window.cancelNewProj=()=>document.getElementById('new-proj-form')?.remove();
-window.editTitle=id=>{const el=document.getElementById('proj-title');if(!el)return;const p=projects.find(p=>p.id===id);if(!p)return;const inp=document.createElement('input');inp.className='input';inp.value=p.name;inp.style.fontSize='17px';inp.style.fontWeight='700';inp.style.flex='1';el.replaceWith(inp);inp.focus();const save=()=>{p.name=inp.value.trim()||p.name;scheduleSave();renderAll();};inp.onblur=save;inp.onkeydown=e=>{if(e.key==='Enter')save();};};
+window.editTask=(pid,tid,el)=>{
+  const p=projects.find(p=>p.id===pid);if(!p)return;
+  const t=p.tasks.find(t=>t.id===tid);if(!t||t.done)return;
+  const inp=document.createElement('input');
+  inp.className='input';inp.value=t.text;inp.style.fontSize='12px';inp.style.padding='2px 6px';inp.style.flex='1';
+  el.replaceWith(inp);inp.focus();inp.select();
+  const save=()=>{const val=inp.value.trim();if(val)t.text=val;scheduleSave();renderDetail();};
+  inp.onblur=save;inp.onkeydown=e=>{if(e.key==='Enter')inp.blur();if(e.key==='Escape'){inp.value=t.text;inp.blur();}};
+};
+let dragSrcTid=null,dragSrcPid=null;
+window.dragStart=(e)=>{dragSrcTid=e.currentTarget.dataset.tid;dragSrcPid=e.currentTarget.dataset.pid;e.currentTarget.classList.add('dragging');e.dataTransfer.effectAllowed='move';};
+window.dragOver=(e)=>{e.preventDefault();e.dataTransfer.dropEffect='move';e.currentTarget.classList.add('drag-over');};
+window.dragLeave=(e)=>{e.currentTarget.classList.remove('drag-over');};
+window.dragEnd=(e)=>{e.currentTarget.classList.remove('dragging');document.querySelectorAll('.drag-over').forEach(el=>el.classList.remove('drag-over'));};
+window.dragDrop=(e)=>{
+  e.preventDefault();e.currentTarget.classList.remove('drag-over');
+  const toTid=e.currentTarget.dataset.tid;const toPid=e.currentTarget.dataset.pid;
+  if(!dragSrcTid||dragSrcTid===toTid||dragSrcPid!==toPid)return;
+  const p=projects.find(p=>p.id===dragSrcPid);if(!p)return;
+  const tasks=p.tasks;
+  const fromIdx=tasks.findIndex(t=>t.id===dragSrcTid);
+  const toIdx=tasks.findIndex(t=>t.id===toTid);
+  if(fromIdx<0||toIdx<0)return;
+  const moved=tasks.splice(fromIdx,1)[0];
+  tasks.splice(toIdx,0,moved);
+  scheduleSave();renderDetail();
+};const el=document.getElementById('proj-title');if(!el)return;const p=projects.find(p=>p.id===id);if(!p)return;const inp=document.createElement('input');inp.className='input';inp.value=p.name;inp.style.fontSize='17px';inp.style.fontWeight='700';inp.style.flex='1';el.replaceWith(inp);inp.focus();const save=()=>{p.name=inp.value.trim()||p.name;scheduleSave();renderAll();};inp.onblur=save;inp.onkeydown=e=>{if(e.key==='Enter')save();};};
 window.updateProject=(id,field,val)=>{const p=projects.find(p=>p.id===id);if(!p)return;p[field]=val;if(field==='status'&&val==='done')p.priority='completed';if(field==='status'&&val!=='done'&&p.priority==='completed')p.priority='mid';scheduleSave();renderAll();};
 window.deleteProject=id=>{if(!confirm('ลบโปรเจกต์นี้?'))return;projects=dedup(projects.filter(p=>p.id!==id));if(selectedId===id)selectedId=null;scheduleSave();renderAll();};
 window.addTask=pid=>{const inp=document.getElementById('task-input');if(!inp)return;const text=inp.value.trim();if(!text)return;const p=projects.find(p=>p.id===pid);if(!p)return;p.tasks=[...(p.tasks||[]),{id:genId(),text,done:false}];inp.value='';scheduleSave();renderDetail();renderProjList();};
