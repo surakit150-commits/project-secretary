@@ -301,7 +301,7 @@ function renderDetail(){
       <div class="meta-row">
         <div style="display:flex;align-items:center;gap:6px;flex:1">
           <span style="font-size:10px;color:var(--text3)">หมวดหมู่:</span>
-          <input list="cat-suggestions" id="cat-inp" class="input" value="${esc(p.category||'')}" placeholder="ระบุหมวดหมู่..." onblur="updateProject('${p.id}','category',this.value.trim())" onkeydown="if(event.key==='Enter')this.blur()" style="flex:1;font-size:11px;padding:4px 8px;max-width:160px">
+          <input list="cat-suggestions" id="cat-inp" class="input" value="${esc(p.category||'')}" placeholder="ระบุหมวดหมู่..." oninput="window._catChanged=true" onblur="if(window._catChanged){updateProject('${p.id}','category',this.value.trim());window._catChanged=false;}" onchange="updateProject('${p.id}','category',this.value.trim());window._catChanged=false;" onkeydown="if(event.key==='Enter')this.blur()" style="flex:1;font-size:11px;padding:4px 8px;max-width:160px">
           <datalist id="cat-suggestions">${cats.map(c=>`<option value="${esc(c)}">`).join('')}</datalist>
           ${p.category?`<span class="cat-tag" style="background:${catColor}22;color:${catColor};border:1px solid ${catColor}44">${esc(p.category)}</span>`:''}
         </div>
