@@ -148,6 +148,7 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
           <button class="sb-btn" id="f-priority-high" onclick="setFilter('priority','high')"><div class="sb-dot" style="background:#ef4444"></div>ด่วน<span class="sb-count" id="fpc-high">0</span></button>
           <button class="sb-btn" id="f-priority-mid" onclick="setFilter('priority','mid')"><div class="sb-dot" style="background:#f59e0b"></div>ปานกลาง<span class="sb-count" id="fpc-mid">0</span></button>
           <button class="sb-btn" id="f-priority-low" onclick="setFilter('priority','low')"><div class="sb-dot" style="background:#4b5563"></div>ปกติ<span class="sb-count" id="fpc-low">0</span></button>
+          <button class="sb-btn" id="f-priority-completed" onclick="setFilter('priority','completed')"><div class="sb-dot" style="background:#22c55e"></div>เสร็จแล้ว<span class="sb-count" id="fpc-completed">0</span></button>
         </div>
         <div class="sb-section">
           <div class="sb-label">ความคืบหน้า</div>
@@ -187,7 +188,7 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 <script>
 const GAS_URL="https://script.google.com/macros/s/AKfycbw7jdVrR-yyXNez2Y1sLta0ULRH6FlNiTIyPvzp2SQtwRexwS1-8Q9F2T12fbfviD_I/exec";
 const STATUS={active:{label:"กำลังดำเนินการ",color:"#22c55e",bg:"#052e16"},pending:{label:"รอดำเนินการ",color:"#f59e0b",bg:"#2d1b00"},done:{label:"เสร็จสิ้น",color:"#6b7280",bg:"#111827"},blocked:{label:"ติดขัด",color:"#ef4444",bg:"#1f0a0a"}};
-const PRIORITY={high:{label:"ด่วน",color:"#ef4444"},mid:{label:"ปานกลาง",color:"#f59e0b"},low:{label:"ปกติ",color:"#4b5563"}};
+const PRIORITY={high:{label:"ด่วน",color:"#ef4444"},mid:{label:"ปานกลาง",color:"#f59e0b"},low:{label:"ปกติ",color:"#4b5563"},completed:{label:"เสร็จแล้ว",color:"#22c55e"}};
 const CAT_COLORS=["#6366f1","#22c55e","#f59e0b","#ef4444","#8b5cf6","#06b6d4","#f97316","#ec4899","#84cc16","#64748b"];
 const AI_TOOLS=[
   {name:"get_all_projects",description:"ดึงข้อมูลโปรเจกต์ทั้งหมด",input_schema:{type:"object",properties:{},required:[]}},
@@ -234,7 +235,7 @@ async function _doSave(){isSaving=true;pendingSave=false;try{const res=await fet
 window.setFilter=(type,val)=>{
   F[type]=val;
   if(type==='status'){['all','active','pending','blocked','done'].forEach(k=>{const el=document.getElementById('f-status-'+k);if(el)el.className='sb-btn'+(k===val?' active':'');});}
-  if(type==='priority'){['all','high','mid','low'].forEach(k=>{const el=document.getElementById('f-priority-'+k);if(el)el.className='sb-btn'+(k===val?' active':'');});}
+  if(type==='priority'){['all','high','mid','low','completed'].forEach(k=>{const el=document.getElementById('f-priority-'+k);if(el)el.className='sb-btn'+(k===val?' active':'');});}
   if(type==='progress'){['all','none','low','mid','full'].forEach(k=>{const el=document.getElementById('f-prog-'+k);if(el)el.className='sb-btn'+(k===val?' active':'');});}
   if(type==='cat')renderCatFilters();
   renderProjList();
@@ -256,7 +257,7 @@ function applyFilters(list){
 function renderAll(){renderSidebarCounts();renderCatFilters();renderProjList();renderDetail();const total=projects.length,active=projects.filter(p=>p.status==='active').length;document.getElementById('proj-count').textContent=`${total} โปรเจกต์ · ${active} กำลังดำเนิน`;updateMobileUI();}
 function renderSidebarCounts(){
   ['all','active','pending','blocked','done'].forEach(k=>{const el=document.getElementById('fc-'+k);if(el)el.textContent=k==='all'?projects.length:projects.filter(p=>p.status===k).length;});
-  ['all','high','mid','low'].forEach(k=>{const el=document.getElementById('fpc-'+k);if(el)el.textContent=k==='all'?projects.length:projects.filter(p=>(p.priority||'mid')===k).length;});
+  ['all','high','mid','low','completed'].forEach(k=>{const el=document.getElementById('fpc-'+k);if(el)el.textContent=k==='all'?projects.length:projects.filter(p=>(p.priority||'mid')===k).length;});
 }
 function renderCatFilters(){
   const cats=getAllCats(),list=document.getElementById('cat-filter-list');list.innerHTML='';
@@ -346,7 +347,7 @@ window.confirmNewProj=()=>{
 };
 window.cancelNewProj=()=>document.getElementById('new-proj-form')?.remove();
 window.editTitle=id=>{const el=document.getElementById('proj-title');if(!el)return;const p=projects.find(p=>p.id===id);if(!p)return;const inp=document.createElement('input');inp.className='input';inp.value=p.name;inp.style.fontSize='17px';inp.style.fontWeight='700';inp.style.flex='1';el.replaceWith(inp);inp.focus();const save=()=>{p.name=inp.value.trim()||p.name;scheduleSave();renderAll();};inp.onblur=save;inp.onkeydown=e=>{if(e.key==='Enter')save();};};
-window.updateProject=(id,field,val)=>{const p=projects.find(p=>p.id===id);if(!p)return;p[field]=val;scheduleSave();renderAll();};
+window.updateProject=(id,field,val)=>{const p=projects.find(p=>p.id===id);if(!p)return;p[field]=val;if(field==='status'&&val==='done')p.priority='completed';if(field==='status'&&val!=='done'&&p.priority==='completed')p.priority='mid';scheduleSave();renderAll();};
 window.deleteProject=id=>{if(!confirm('ลบโปรเจกต์นี้?'))return;projects=dedup(projects.filter(p=>p.id!==id));if(selectedId===id)selectedId=null;scheduleSave();renderAll();};
 window.addTask=pid=>{const inp=document.getElementById('task-input');if(!inp)return;const text=inp.value.trim();if(!text)return;const p=projects.find(p=>p.id===pid);if(!p)return;p.tasks=[...(p.tasks||[]),{id:genId(),text,done:false}];inp.value='';scheduleSave();renderDetail();renderProjList();};
 
@@ -356,10 +357,10 @@ window.toggleTask=(pid,tid)=>{
   p.tasks=(p.tasks||[]).map(t=>t.id===tid?{...t,done:!t.done}:t);
   const tot=(p.tasks||[]).length;
   const dn=(p.tasks||[]).filter(t=>t.done).length;
-  // task ครบ 100% → เปลี่ยนเป็น done อัตโนมัติ (เว้นแต่ blocked)
-  if(tot>0&&dn===tot&&p.status!=='blocked') p.status='done';
-  // untick task → กลับเป็น active (ถ้า status เป็น done)
-  if(dn<tot&&p.status==='done') p.status='active';
+  // task ครบ 100% → เปลี่ยนเป็น done + priority เป็น completed
+  if(tot>0&&dn===tot&&p.status!=='blocked'){p.status='done';p.priority='completed';}
+  // untick task → กลับเป็น active + ล้าง completed priority
+  if(dn<tot&&p.status==='done'){p.status='active';if(p.priority==='completed')p.priority='mid';}
   scheduleSave();renderDetail();renderProjList();renderSidebarCounts();
 };
 
