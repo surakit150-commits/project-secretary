@@ -301,7 +301,8 @@ function renderDetail(){
       <div class="meta-row">
         <div style="display:flex;align-items:center;gap:6px;flex:1">
           <span style="font-size:10px;color:var(--text3)">หมวดหมู่:</span>
-          <input list="cat-suggestions" id="cat-inp" class="input" value="${esc(p.category||'')}" placeholder="ระบุหมวดหมู่..." oninput="window._catChanged=true" onblur="if(window._catChanged){updateProject('${p.id}','category',this.value.trim());window._catChanged=false;}" onchange="updateProject('${p.id}','category',this.value.trim());window._catChanged=false;" onkeydown="if(event.key==='Enter')this.blur()" style="flex:1;font-size:11px;padding:4px 8px;max-width:160px">
+          <input list="cat-suggestions" id="cat-inp" class="input" value="${esc(p.category||'')}" placeholder="ระบุหมวดหมู่..." onkeydown="if(event.key==='Enter')saveCategory('${p.id}')" style="flex:1;font-size:11px;padding:4px 8px;max-width:140px">
+          <button class="btn btn-icon" style="background:#6366f1;color:#fff;border:none;font-size:10px" onclick="saveCategory('${p.id}')">บันทึก</button>
           <datalist id="cat-suggestions">${cats.map(c=>`<option value="${esc(c)}">`).join('')}</datalist>
           ${p.category?`<span class="cat-tag" style="background:${catColor}22;color:${catColor};border:1px solid ${catColor}44">${esc(p.category)}</span>`:''}
         </div>
@@ -376,6 +377,13 @@ window.dragDrop=(e)=>{
   const moved=tasks.splice(fromIdx,1)[0];
   tasks.splice(toIdx,0,moved);
   scheduleSave();renderDetail();
+};
+window.saveCategory=pid=>{
+  const inp=document.getElementById('cat-inp');if(!inp)return;
+  const val=inp.value.trim();
+  const p=projects.find(p=>p.id===pid);if(!p)return;
+  p.category=val;
+  scheduleSave();renderAll();
 };
 window.editTitle=id=>{const el=document.getElementById('proj-title');if(!el)return;const p=projects.find(p=>p.id===id);if(!p)return;const inp=document.createElement('input');inp.className='input';inp.value=p.name;inp.style.fontSize='17px';inp.style.fontWeight='700';inp.style.flex='1';el.replaceWith(inp);inp.focus();const save=()=>{p.name=inp.value.trim()||p.name;scheduleSave();renderAll();};inp.onblur=save;inp.onkeydown=e=>{if(e.key==='Enter')save();};};
 window.updateProject=(id,field,val)=>{const p=projects.find(p=>p.id===id);if(!p)return;p[field]=val;if(field==='status'&&val==='done')p.priority='completed';if(field==='status'&&val!=='done'&&p.priority==='completed')p.priority='mid';scheduleSave();renderAll();};
