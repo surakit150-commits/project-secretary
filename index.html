@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -19,6 +20,7 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;background:var(--bg2);border-bottom:1px solid var(--border);flex-shrink:0;}
 .main{display:flex;flex:1;overflow:hidden;}
 .sidebar{width:248px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;}
+.sidebar-scroll{flex:1;overflow-y:auto;}
 .content{flex:1;overflow-y:auto;padding:18px;}
 .ai-panel{width:320px;border-left:1px solid var(--border);background:var(--bg2);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;}
 @media(max-width:700px){
@@ -40,20 +42,18 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .btn-ai.active{border-color:var(--indigo);background:#1e1b4b;color:#a5b4fc;}
 .btn-sm{padding:4px 10px;font-size:11px;}
 .btn-icon{padding:4px 7px;font-size:11px;}
+
+/* Sidebar */
 .sb-section{padding:8px 10px;border-bottom:1px solid var(--border);}
 .sb-label{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.08em;margin-bottom:5px;padding:0 2px;}
-.filter-btn{display:block;width:100%;text-align:left;padding:5px 8px;border-radius:6px;border:none;background:transparent;color:var(--text3);font-size:12px;cursor:pointer;font-family:inherit;margin-bottom:2px;transition:all .15s;}
-.filter-btn.active{background:#1a1a2e;color:#c7d2fe;}
-.filter-count{float:right;font-size:10px;color:var(--text3);}
-.proj-list{flex:1;overflow-y:auto;padding:10px;}
-.prog-filters{display:flex;flex-direction:column;gap:2px;}
-.prog-btn{display:flex;align-items:center;gap:7px;width:100%;padding:5px 8px;border-radius:6px;border:none;background:transparent;color:var(--text3);font-size:12px;cursor:pointer;font-family:inherit;transition:all .15s;}
-.prog-btn.active{background:#1a1a2e;color:#c7d2fe;}
-.prog-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0;}
-.cat-filter-list{display:flex;flex-direction:column;gap:2px;}
-.cat-filter-btn{display:flex;align-items:center;gap:6px;width:100%;padding:5px 8px;border-radius:6px;border:none;background:transparent;color:var(--text3);font-size:12px;cursor:pointer;font-family:inherit;transition:all .15s;}
-.cat-filter-btn.active{background:#1a1a2e;color:#c7d2fe;}
-.cat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.sb-btn{display:flex;align-items:center;gap:7px;width:100%;padding:5px 8px;border-radius:6px;border:none;background:transparent;color:var(--text3);font-size:12px;cursor:pointer;font-family:inherit;margin-bottom:2px;transition:all .15s;text-align:left;}
+.sb-btn.active{background:#1a1a2e;color:#c7d2fe;}
+.sb-count{margin-left:auto;font-size:10px;color:var(--text3);}
+.sb-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0;}
+.sb-circle{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.proj-list{padding:10px;}
+
+/* Project card */
 .proj-card{padding:9px 10px;border-radius:8px;margin-bottom:5px;border:1px solid var(--border);background:transparent;cursor:pointer;transition:all .15s;}
 .proj-card:active{opacity:.8;}
 .proj-card.selected{border-color:var(--indigo);background:var(--bg3);}
@@ -61,16 +61,20 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .proj-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
 .proj-name{flex:1;font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .priority-badge{font-size:9px;padding:1px 5px;border-radius:4px;border:1px solid;flex-shrink:0;}
-.cat-tag{font-size:9px;padding:1px 6px;border-radius:10px;flex-shrink:0;max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.progress-bar{display:flex;align-items:center;gap:5px;}
-.progress-track{flex:1;height:2px;background:#1e2536;border-radius:2px;overflow:hidden;}
-.progress-fill{height:100%;background:var(--indigo);border-radius:2px;}
-.progress-label{font-size:9px;color:var(--text3);}
+.cat-tag{font-size:9px;padding:1px 6px;border-radius:10px;flex-shrink:0;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.prog-bar-row{display:flex;align-items:center;gap:5px;}
+.prog-track{flex:1;height:2px;background:#1e2536;border-radius:2px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:2px;}
+.prog-label{font-size:9px;color:var(--text3);}
+
+/* Forms */
 .new-proj-form{background:var(--bg3);border:1px solid var(--indigo);border-radius:10px;padding:10px;margin-bottom:8px;}
 .input{width:100%;background:var(--bg);border:1px solid var(--border2);border-radius:6px;padding:6px 8px;color:var(--text);font-size:12px;font-family:inherit;outline:none;}
 .input:focus{border-color:var(--indigo);}
 .chip-row{display:flex;gap:4px;flex-wrap:wrap;margin:5px 0;}
 .chip{padding:3px 8px;border-radius:5px;border:1px solid var(--border2);background:transparent;font-size:10px;cursor:pointer;font-family:inherit;transition:all .15s;}
+
+/* Detail */
 .detail-header{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:14px;}
 .detail-title{font-size:17px;font-weight:700;cursor:text;flex:1;}
 .detail-title-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
@@ -93,6 +97,8 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
 .note-date{font-size:10px;color:var(--text3);}
 .empty-hint{font-size:11px;color:var(--text3);text-align:center;padding:10px 0;}
 .divider-done{font-size:10px;color:var(--text3);padding:5px 0 3px;border-top:1px dashed #1e2536;margin-top:4px;}
+
+/* AI */
 .ai-header{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
 .ai-dot{width:7px;height:7px;border-radius:50%;background:var(--indigo);box-shadow:0 0 8px var(--indigo);transition:all .3s;flex-shrink:0;}
 .ai-dot.loading{background:var(--amber);box-shadow:0 0 8px var(--amber);}
@@ -133,39 +139,92 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
       <button class="btn btn-primary" onclick="showNewProj()">+ โปรเจกต์</button>
     </div>
   </div>
+
   <div class="main">
     <div class="overlay" id="overlay" onclick="closeAll()"></div>
+
+    <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
-      <div class="sb-section">
-        <div class="sb-label">สถานะ</div>
-        <button class="filter-btn active" onclick="setFilter('status','all')" id="f-all">ทั้งหมด<span class="filter-count" id="fc-all">0</span></button>
-        <button class="filter-btn" onclick="setFilter('status','active')" id="f-active">กำลังดำเนินการ<span class="filter-count" id="fc-active">0</span></button>
-        <button class="filter-btn" onclick="setFilter('status','pending')" id="f-pending">รอดำเนินการ<span class="filter-count" id="fc-pending">0</span></button>
-        <button class="filter-btn" onclick="setFilter('status','blocked')" id="f-blocked">ติดขัด<span class="filter-count" id="fc-blocked">0</span></button>
-        <button class="filter-btn" onclick="setFilter('status','done')" id="f-done">เสร็จสิ้น<span class="filter-count" id="fc-done">0</span></button>
-      </div>
-      <div class="sb-section">
-        <div class="sb-label">ความคืบหน้า</div>
-        <div class="prog-filters">
-          <button class="prog-btn active" onclick="setFilter('progress','all')" id="fp-all"><div class="prog-dot" style="background:#374151"></div>ทุกระดับ</button>
-          <button class="prog-btn" onclick="setFilter('progress','none')" id="fp-none"><div class="prog-dot" style="background:#ef4444"></div>ยังไม่เริ่ม (0%)</button>
-          <button class="prog-btn" onclick="setFilter('progress','low')" id="fp-low"><div class="prog-dot" style="background:#f59e0b"></div>เริ่มแล้ว (1–49%)</button>
-          <button class="prog-btn" onclick="setFilter('progress','mid')" id="fp-mid"><div class="prog-dot" style="background:#6366f1"></div>ใกล้เสร็จ (50–99%)</button>
-          <button class="prog-btn" onclick="setFilter('progress','full')" id="fp-full"><div class="prog-dot" style="background:#22c55e"></div>เสร็จครบ (100%)</button>
+      <div class="sidebar-scroll">
+
+        <!-- สถานะ -->
+        <div class="sb-section">
+          <div class="sb-label">สถานะ</div>
+          <button class="sb-btn active" id="f-status-all" onclick="setFilter('status','all')">
+            <div class="sb-circle" style="background:#4b5563"></div>ทั้งหมด<span class="sb-count" id="fc-all">0</span>
+          </button>
+          <button class="sb-btn" id="f-status-active" onclick="setFilter('status','active')">
+            <div class="sb-circle" style="background:#22c55e"></div>กำลังดำเนินการ<span class="sb-count" id="fc-active">0</span>
+          </button>
+          <button class="sb-btn" id="f-status-pending" onclick="setFilter('status','pending')">
+            <div class="sb-circle" style="background:#f59e0b"></div>รอดำเนินการ<span class="sb-count" id="fc-pending">0</span>
+          </button>
+          <button class="sb-btn" id="f-status-blocked" onclick="setFilter('status','blocked')">
+            <div class="sb-circle" style="background:#ef4444"></div>ติดขัด<span class="sb-count" id="fc-blocked">0</span>
+          </button>
+          <button class="sb-btn" id="f-status-done" onclick="setFilter('status','done')">
+            <div class="sb-circle" style="background:#6b7280"></div>เสร็จสิ้น<span class="sb-count" id="fc-done">0</span>
+          </button>
         </div>
-      </div>
-      <div class="sb-section">
-        <div class="sb-label">หมวดหมู่</div>
-        <div class="cat-filter-list" id="cat-filter-list">
-          <button class="cat-filter-btn active" onclick="setFilter('cat','all')" data-cat="all"><div class="cat-dot" style="background:#4b5563"></div>ทั้งหมด</button>
+
+        <!-- ความเร่งด่วน -->
+        <div class="sb-section">
+          <div class="sb-label">ความเร่งด่วน</div>
+          <button class="sb-btn active" id="f-priority-all" onclick="setFilter('priority','all')">
+            <div class="sb-dot" style="background:#4b5563"></div>ทุกระดับ<span class="sb-count" id="fpc-all">0</span>
+          </button>
+          <button class="sb-btn" id="f-priority-high" onclick="setFilter('priority','high')">
+            <div class="sb-dot" style="background:#ef4444"></div>ด่วน<span class="sb-count" id="fpc-high">0</span>
+          </button>
+          <button class="sb-btn" id="f-priority-mid" onclick="setFilter('priority','mid')">
+            <div class="sb-dot" style="background:#f59e0b"></div>ปานกลาง<span class="sb-count" id="fpc-mid">0</span>
+          </button>
+          <button class="sb-btn" id="f-priority-low" onclick="setFilter('priority','low')">
+            <div class="sb-dot" style="background:#4b5563"></div>ปกติ<span class="sb-count" id="fpc-low">0</span>
+          </button>
         </div>
+
+        <!-- ความคืบหน้า -->
+        <div class="sb-section">
+          <div class="sb-label">ความคืบหน้า</div>
+          <button class="sb-btn active" id="f-prog-all" onclick="setFilter('progress','all')">
+            <div class="sb-dot" style="background:#374151"></div>ทุกระดับ
+          </button>
+          <button class="sb-btn" id="f-prog-none" onclick="setFilter('progress','none')">
+            <div class="sb-dot" style="background:#ef4444"></div>ยังไม่เริ่ม (0%)
+          </button>
+          <button class="sb-btn" id="f-prog-low" onclick="setFilter('progress','low')">
+            <div class="sb-dot" style="background:#f59e0b"></div>เริ่มแล้ว (1–49%)
+          </button>
+          <button class="sb-btn" id="f-prog-mid" onclick="setFilter('progress','mid')">
+            <div class="sb-dot" style="background:#6366f1"></div>ใกล้เสร็จ (50–99%)
+          </button>
+          <button class="sb-btn" id="f-prog-full" onclick="setFilter('progress','full')">
+            <div class="sb-dot" style="background:#22c55e"></div>เสร็จครบ (100%)
+          </button>
+        </div>
+
+        <!-- หมวดหมู่ -->
+        <div class="sb-section">
+          <div class="sb-label">หมวดหมู่</div>
+          <div id="cat-filter-list"></div>
+        </div>
+
+        <!-- รายการโปรเจกต์ -->
+        <div class="proj-list" id="proj-list"></div>
       </div>
-      <div class="proj-list" id="proj-list"></div>
     </div>
-    <div class="content" id="content">
-      <div class="empty-state" id="empty-state"><div style="font-size:34px">◈</div><div style="font-size:13px">เลือกโปรเจกต์ หรือสร้างใหม่</div></div>
+
+    <!-- Content -->
+    <div class="content">
+      <div class="empty-state" id="empty-state">
+        <div style="font-size:34px">◈</div>
+        <div style="font-size:13px">เลือกโปรเจกต์ หรือสร้างใหม่</div>
+      </div>
       <div id="detail" style="display:none"></div>
     </div>
+
+    <!-- AI Panel -->
     <div class="ai-panel" id="ai-panel" style="display:none">
       <div class="ai-header">
         <div class="ai-dot" id="ai-dot"></div>
@@ -182,6 +241,7 @@ body{font-family:'Noto Sans Thai',sans-serif;background:var(--bg);color:var(--te
     </div>
   </div>
 </div>
+
 <script>
 const GAS_URL="https://script.google.com/macros/s/AKfycbxoS8iQvxrH8e1yNk4FS9L-B92Ssc9COBp6fjdXNwQTQW5Zwg-1_yYQ0WdFN7pXt7ufSw/exec";
 const STATUS={active:{label:"กำลังดำเนินการ",color:"#22c55e",bg:"#052e16"},pending:{label:"รอดำเนินการ",color:"#f59e0b",bg:"#2d1b00"},done:{label:"เสร็จสิ้น",color:"#6b7280",bg:"#111827"},blocked:{label:"ติดขัด",color:"#ef4444",bg:"#1f0a0a"}};
@@ -199,55 +259,48 @@ const AI_TOOLS=[
   {name:"delete_note",description:"ลบ note",input_schema:{type:"object",properties:{project_id:{type:"string"},note_id:{type:"string"}},required:["project_id","note_id"]}},
 ];
 
-let projects=[],selectedId=null,filters={status:"all",progress:"all",cat:"all"},aiHistory=[],isMobile=window.innerWidth<=700;
-// ── Anti-duplicate save lock ──
+let projects=[],selectedId=null,aiHistory=[],isMobile=window.innerWidth<=700;
 let isSaving=false,pendingSave=false;
+
+// ── Filters state ──────────────────────────────────────────────────────────
+const F={status:"all",priority:"all",progress:"all",cat:"all"};
+
 window.addEventListener('resize',()=>{isMobile=window.innerWidth<=700;updateMobileUI();});
 function genId(){return'p_'+Date.now()+'_'+Math.random().toString(36).slice(2,6);}
 function today(){return new Date().toISOString().slice(0,10);}
 function fmtDate(d){if(!d)return'';return new Date(d).toLocaleDateString('th-TH',{day:'numeric',month:'short',year:'2-digit'});}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function updateMobileUI(){document.getElementById('btn-menu').style.display=isMobile?'':'none';}
-function getProgress(p){const tot=(p.tasks||[]).length;if(!tot)return 0;return Math.round((p.tasks||[]).filter(t=>t.done).length/tot*100);}
-function getCatColor(cat){if(!cat)return'#4b5563';const cats=getAllCats();const idx=cats.indexOf(cat);return CAT_COLORS[idx%CAT_COLORS.length];}
+function getPct(p){const t=(p.tasks||[]).length;return t?Math.round((p.tasks||[]).filter(t=>t.done).length/t*100):0;}
+function getCatColor(cat){const cats=getAllCats();return CAT_COLORS[cats.indexOf(cat)%CAT_COLORS.length]||'#4b5563';}
 function getAllCats(){const s=new Set();projects.forEach(p=>{if(p.category&&p.category.trim())s.add(p.category.trim());});return Array.from(s).sort();}
-
-// ── Deduplicate by id ──────────────────────────────────────────────────────
-function dedup(arr){const seen=new Set();return arr.filter(p=>{if(!p.id||seen.has(p.id))return false;seen.add(p.id);return true;});}
+function dedup(arr){const s=new Set();return arr.filter(p=>{if(!p.id||s.has(p.id))return false;s.add(p.id);return true;});}
 
 // ── Sync ──────────────────────────────────────────────────────────────────
 function setSyncStatus(state,text){const b=document.getElementById('sync-badge');b.className='sync-badge '+state;b.textContent=text;}
-
 async function loadFromSheet(){
   setSyncStatus('saving','⟳ กำลังโหลด...');
   try{
     const res=await fetch(GAS_URL+'?action=get&t='+Date.now());
     const data=await res.json();
-    if(data.ok){
-      projects=dedup(data.projects||[]);
-      setSyncStatus('ok','✓ ซิงค์แล้ว');
-      try{localStorage.setItem('psec-bk',JSON.stringify(projects));}catch{}
-    }else setSyncStatus('error','✗ โหลดไม่สำเร็จ');
+    if(data.ok){projects=dedup(data.projects||[]);setSyncStatus('ok','✓ ซิงค์แล้ว');try{localStorage.setItem('psec-bk',JSON.stringify(projects));}catch{}}
+    else setSyncStatus('error','✗ โหลดไม่สำเร็จ');
   }catch{
     setSyncStatus('error','✗ ออฟไลน์');
     try{const s=localStorage.getItem('psec-bk');if(s)projects=dedup(JSON.parse(s));}catch{}
   }
   renderAll();
 }
-
-// ── Save with lock to prevent race condition ──────────────────────────────
 function scheduleSave(){
   setSyncStatus('saving','⟳ กำลังบันทึก...');
   try{localStorage.setItem('psec-bk',JSON.stringify(projects));}catch{}
   if(isSaving){pendingSave=true;return;}
   _doSave();
 }
-
 async function _doSave(){
   isSaving=true;pendingSave=false;
   try{
-    const payload=JSON.stringify({action:'save_all',projects:dedup(projects)});
-    const res=await fetch(GAS_URL,{method:'POST',body:payload});
+    const res=await fetch(GAS_URL,{method:'POST',body:JSON.stringify({action:'save_all',projects:dedup(projects)})});
     const data=await res.json();
     setSyncStatus(data.ok?'ok':'error',data.ok?'✓ ซิงค์แล้ว':'✗ บันทึกไม่สำเร็จ');
   }catch{setSyncStatus('error','✗ บันทึกไม่สำเร็จ');}
@@ -257,57 +310,137 @@ async function _doSave(){
 
 // ── Filter ────────────────────────────────────────────────────────────────
 window.setFilter=(type,val)=>{
-  filters[type]=val;
-  if(type==='status'){['all','active','pending','blocked','done'].forEach(f=>{const el=document.getElementById('f-'+f);if(el)el.className='filter-btn'+(f===val?' active':'');});}
-  if(type==='progress'){['all','none','low','mid','full'].forEach(f=>{const el=document.getElementById('fp-'+f);if(el)el.className='prog-btn'+(f===val?' active':'');});}
-  if(type==='cat'){document.querySelectorAll('.cat-filter-btn').forEach(el=>{el.className='cat-filter-btn'+(el.dataset.cat===val?' active':'');});}
+  F[type]=val;
+
+  // update status buttons
+  if(type==='status'){
+    ['all','active','pending','blocked','done'].forEach(k=>{
+      const el=document.getElementById('f-status-'+k);
+      if(el)el.className='sb-btn'+(k===val?' active':'');
+    });
+  }
+  // update priority buttons
+  if(type==='priority'){
+    ['all','high','mid','low'].forEach(k=>{
+      const el=document.getElementById('f-priority-'+k);
+      if(el)el.className='sb-btn'+(k===val?' active':'');
+    });
+  }
+  // update progress buttons
+  if(type==='progress'){
+    ['all','none','low','mid','full'].forEach(k=>{
+      const el=document.getElementById('f-prog-'+k);
+      if(el)el.className='sb-btn'+(k===val?' active':'');
+    });
+  }
+  // update cat buttons — re-render to pick up active class
+  if(type==='cat') renderCatFilters();
+
   renderProjList();
 };
+
 function applyFilters(list){
   return list.filter(p=>{
-    if(filters.status!=='all'&&p.status!==filters.status)return false;
-    const pct=getProgress(p);
-    if(filters.progress==='none'&&pct!==0)return false;
-    if(filters.progress==='low'&&(pct<1||pct>=50))return false;
-    if(filters.progress==='mid'&&(pct<50||pct>=100))return false;
-    if(filters.progress==='full'&&pct!==100)return false;
-    if(filters.cat!=='all'&&(p.category||'')!==filters.cat)return false;
+    if(F.status!=='all'&&p.status!==F.status)return false;
+    if(F.priority!=='all'&&(p.priority||'mid')!==F.priority)return false;
+    const pct=getPct(p);
+    if(F.progress==='none'&&pct!==0)return false;
+    if(F.progress==='low'&&(pct<1||pct>=50))return false;
+    if(F.progress==='mid'&&(pct<50||pct>=100))return false;
+    if(F.progress==='full'&&pct!==100)return false;
+    if(F.cat!=='all'&&(p.category||'').trim()!==F.cat)return false;
     return true;
   });
 }
 
 // ── Render ────────────────────────────────────────────────────────────────
-function renderAll(){renderSidebarCounts();renderCatFilters();renderProjList();renderDetail();const total=projects.length,active=projects.filter(p=>p.status==='active').length;document.getElementById('proj-count').textContent=`${total} โปรเจกต์ · ${active} กำลังดำเนิน`;updateMobileUI();}
-function renderSidebarCounts(){['all','active','pending','blocked','done'].forEach(f=>{const el=document.getElementById('fc-'+f);if(el)el.textContent=f==='all'?projects.length:projects.filter(p=>p.status===f).length;});}
+function renderAll(){
+  renderSidebarCounts();
+  renderCatFilters();
+  renderProjList();
+  renderDetail();
+  const total=projects.length,active=projects.filter(p=>p.status==='active').length;
+  document.getElementById('proj-count').textContent=`${total} โปรเจกต์ · ${active} กำลังดำเนิน`;
+  updateMobileUI();
+}
+
+function renderSidebarCounts(){
+  // status counts
+  const statusKeys=['all','active','pending','blocked','done'];
+  statusKeys.forEach(k=>{
+    const el=document.getElementById('fc-'+k);
+    if(el)el.textContent=k==='all'?projects.length:projects.filter(p=>p.status===k).length;
+  });
+  // priority counts
+  const prioKeys=['all','high','mid','low'];
+  prioKeys.forEach(k=>{
+    const el=document.getElementById('fpc-'+k);
+    if(el)el.textContent=k==='all'?projects.length:projects.filter(p=>(p.priority||'mid')===k).length;
+  });
+}
+
 function renderCatFilters(){
   const cats=getAllCats();
   const list=document.getElementById('cat-filter-list');
-  list.innerHTML=`<button class="cat-filter-btn${filters.cat==='all'?' active':''}" onclick="setFilter('cat','all')" data-cat="all"><div class="cat-dot" style="background:#4b5563"></div>ทั้งหมด</button>`;
-  cats.forEach(cat=>{const color=getCatColor(cat);const btn=document.createElement('button');btn.className='cat-filter-btn'+(filters.cat===cat?' active':'');btn.dataset.cat=cat;btn.onclick=()=>setFilter('cat',cat);btn.innerHTML=`<div class="cat-dot" style="background:${color}"></div>${esc(cat)}`;list.appendChild(btn);});
+  list.innerHTML='';
+
+  // "ทั้งหมด" button
+  const allBtn=document.createElement('button');
+  allBtn.className='sb-btn'+(F.cat==='all'?' active':'');
+  allBtn.innerHTML=`<div class="sb-circle" style="background:#4b5563"></div>ทั้งหมด`;
+  allBtn.onclick=()=>setFilter('cat','all');
+  list.appendChild(allBtn);
+
+  // one button per category
+  cats.forEach(cat=>{
+    const color=getCatColor(cat);
+    const btn=document.createElement('button');
+    btn.className='sb-btn'+(F.cat===cat?' active':'');
+    btn.innerHTML=`<div class="sb-circle" style="background:${color}"></div>${esc(cat)}<span class="sb-count">${projects.filter(p=>(p.category||'').trim()===cat).length}</span>`;
+    btn.onclick=()=>setFilter('cat',cat);
+    list.appendChild(btn);
+  });
 }
+
 function renderProjList(){
   const filtered=applyFilters(projects);
   const list=document.getElementById('proj-list');
   list.innerHTML='';
-  if(!filtered.length){list.innerHTML='<div style="font-size:11px;color:#2d3748;text-align:center;padding-top:16px">ไม่มีโปรเจกต์</div>';return;}
+  if(!filtered.length){
+    list.innerHTML='<div style="font-size:11px;color:#2d3748;text-align:center;padding:16px 0">ไม่มีโปรเจกต์</div>';
+    return;
+  }
   filtered.forEach(p=>{
-    const done=(p.tasks||[]).filter(t=>t.done).length,total=(p.tasks||[]).length,pct=total?Math.round(done/total*100):0,isSel=selectedId===p.id;
-    const sc=STATUS[p.status]||STATUS.active,pc=PRIORITY[p.priority]||PRIORITY.mid,catColor=p.category?getCatColor(p.category):'transparent';
-    let progColor=pct===100?'#22c55e':pct>=50?'#6366f1':pct>0?'#f59e0b':'#374151';
+    const dn=(p.tasks||[]).filter(t=>t.done).length,tot=(p.tasks||[]).length,pct=tot?Math.round(dn/tot*100):0;
+    const isSel=selectedId===p.id,sc=STATUS[p.status]||STATUS.active,pc=PRIORITY[p.priority]||PRIORITY.mid;
+    const catColor=p.category?getCatColor(p.category.trim()):'transparent';
+    const progColor=pct===100?'#22c55e':pct>=50?'#6366f1':pct>0?'#f59e0b':'#374151';
     const card=document.createElement('div');
     card.className='proj-card'+(isSel?' selected':'');
-    card.innerHTML=`<div class="proj-card-top"><div class="proj-dot" style="background:${sc.color}"></div><div class="proj-name">${esc(p.name)}</div><div class="priority-badge" style="color:${pc.color};border-color:${pc.color}">${pc.label}</div></div>${p.category?`<div style="margin-bottom:3px"><span class="cat-tag" style="background:${catColor}22;color:${catColor};border:1px solid ${catColor}44">${esc(p.category)}</span></div>`:''}<div class="progress-bar"><div class="progress-track"><div class="progress-fill" style="width:${pct}%;background:${progColor}"></div></div><span class="progress-label">${total?pct+'%':'ไม่มีงาน'}</span></div>`;
+    card.innerHTML=`
+      <div class="proj-card-top">
+        <div class="proj-dot" style="background:${sc.color}"></div>
+        <div class="proj-name">${esc(p.name)}</div>
+        <div class="priority-badge" style="color:${pc.color};border-color:${pc.color}">${pc.label}</div>
+      </div>
+      ${p.category?`<div style="margin-bottom:3px"><span class="cat-tag" style="background:${catColor}22;color:${catColor};border:1px solid ${catColor}44">${esc(p.category)}</span></div>`:''}
+      <div class="prog-bar-row">
+        <div class="prog-track"><div class="prog-fill" style="width:${pct}%;background:${progColor}"></div></div>
+        <span class="prog-label">${tot?pct+'%':'ไม่มีงาน'}</span>
+      </div>`;
     card.onclick=()=>{selectedId=p.id;if(isMobile)closeSidebar();renderAll();};
     list.appendChild(card);
   });
 }
+
 function renderDetail(){
   const d=document.getElementById('detail'),empty=document.getElementById('empty-state'),p=projects.find(p=>p.id===selectedId);
   if(!p){d.style.display='none';empty.style.display='';return;}
   empty.style.display='none';d.style.display='';
   const dt=(p.tasks||[]).filter(t=>t.done).length,tt=(p.tasks||[]).length,pct=tt?Math.round(dt/tt*100):0;
-  const cats=getAllCats(),catColor=p.category?getCatColor(p.category):'#4b5563';
+  const cats=getAllCats(),catColor=p.category?getCatColor(p.category.trim()):'#4b5563';
   const pending=(p.tasks||[]).filter(t=>!t.done),completed=(p.tasks||[]).filter(t=>t.done);
+  const progColor=pct===100?'#22c55e':pct>=50?'#6366f1':'#f59e0b';
   d.innerHTML=`
     <div class="detail-header">
       <div class="detail-title-row">
@@ -317,16 +450,22 @@ function renderDetail(){
       <div class="status-row">
         ${Object.entries(STATUS).map(([k,v])=>`<button class="chip" style="color:${v.color};border-color:${p.status===k?v.color:'#2d3748'};background:${p.status===k?v.bg:'transparent'}" onclick="updateProject('${p.id}','status','${k}')">${v.label}</button>`).join('')}
         <div style="width:1px;background:#2d3748;margin:0 2px"></div>
-        ${Object.entries(PRIORITY).map(([k,v])=>`<button class="chip" style="color:${v.color};border-color:${p.priority===k?v.color:'#2d3748'};background:${p.priority===k?'#1a1a2e':'transparent'}" onclick="updateProject('${p.id}','priority','${k}')">${v.label}</button>`).join('')}
+        ${Object.entries(PRIORITY).map(([k,v])=>`<button class="chip" style="color:${v.color};border-color:${(p.priority||'mid')===k?v.color:'#2d3748'};background:${(p.priority||'mid')===k?'#1a1a2e':'transparent'}" onclick="updateProject('${p.id}','priority','${k}')">${v.label}</button>`).join('')}
       </div>
       <div class="meta-row">
         <div style="display:flex;align-items:center;gap:6px;flex:1">
           <span style="font-size:10px;color:var(--text3)">หมวดหมู่:</span>
-          <input list="cat-suggestions" id="cat-inp" class="input" value="${esc(p.category||'')}" placeholder="ระบุหมวดหมู่..." onchange="updateProject('${p.id}','category',this.value.trim())" style="flex:1;font-size:11px;padding:4px 8px;max-width:160px">
+          <input list="cat-suggestions" id="cat-inp" class="input" value="${esc(p.category||'')}"
+            placeholder="ระบุหมวดหมู่..."
+            onchange="updateProject('${p.id}','category',this.value.trim())"
+            style="flex:1;font-size:11px;padding:4px 8px;max-width:160px">
           <datalist id="cat-suggestions">${cats.map(c=>`<option value="${esc(c)}">`).join('')}</datalist>
           ${p.category?`<span class="cat-tag" style="background:${catColor}22;color:${catColor};border:1px solid ${catColor}44">${esc(p.category)}</span>`:''}
         </div>
-        ${tt>0?`<div style="display:flex;align-items:center;gap:6px"><div class="progress-track" style="width:80px;height:4px"><div class="progress-fill" style="width:${pct}%;background:${pct===100?'#22c55e':pct>=50?'#6366f1':'#f59e0b'}"></div></div><span style="font-size:11px;color:var(--text3)">${pct}% (${dt}/${tt})</span></div>`:''}
+        ${tt>0?`<div style="display:flex;align-items:center;gap:6px">
+          <div class="prog-track" style="width:80px;height:4px"><div class="prog-fill" style="width:${pct}%;background:${progColor}"></div></div>
+          <span style="font-size:11px;color:var(--text3)">${pct}% (${dt}/${tt})</span>
+        </div>`:''}
       </div>
     </div>
     <div class="grid2">
@@ -338,9 +477,19 @@ function renderDetail(){
         </div>
         <div id="task-list">
           ${!pending.length&&!completed.length?'<div class="empty-hint">ยังไม่มีงาน</div>':''}
-          ${pending.map(t=>`<div class="task-row"><div class="task-check" onclick="toggleTask('${p.id}','${t.id}')"></div><span class="task-text">${esc(t.text)}</span><button class="btn btn-icon" style="color:#374151;padding:1px 5px" onclick="deleteTask('${p.id}','${t.id}')">✕</button></div>`).join('')}
+          ${pending.map(t=>`
+            <div class="task-row">
+              <div class="task-check" onclick="toggleTask('${p.id}','${t.id}')"></div>
+              <span class="task-text">${esc(t.text)}</span>
+              <button class="btn btn-icon" style="color:#374151;padding:1px 5px" onclick="deleteTask('${p.id}','${t.id}')">✕</button>
+            </div>`).join('')}
           ${completed.length?`<div class="divider-done">✓ เสร็จแล้ว ${completed.length} งาน</div>`:''}
-          ${completed.map(t=>`<div class="task-row done-row"><div class="task-check done" onclick="toggleTask('${p.id}','${t.id}')"><span style="color:#fff;font-size:9px">✓</span></div><span class="task-text done">${esc(t.text)}</span><button class="btn btn-icon" style="color:#374151;padding:1px 5px" onclick="deleteTask('${p.id}','${t.id}')">✕</button></div>`).join('')}
+          ${completed.map(t=>`
+            <div class="task-row done-row">
+              <div class="task-check done" onclick="toggleTask('${p.id}','${t.id}')"><span style="color:#fff;font-size:9px">✓</span></div>
+              <span class="task-text done">${esc(t.text)}</span>
+              <button class="btn btn-icon" style="color:#374151;padding:1px 5px" onclick="deleteTask('${p.id}','${t.id}')">✕</button>
+            </div>`).join('')}
         </div>
       </div>
       <div class="card">
@@ -350,7 +499,14 @@ function renderDetail(){
           <button class="btn btn-icon" style="background:#8b5cf6;color:#fff;border:none" onclick="addNote('${p.id}')">+</button>
         </div>
         ${!(p.notes||[]).length?'<div class="empty-hint">ยังไม่มีบันทึก</div>':''}
-        ${(p.notes||[]).map(n=>`<div class="note-card"><div class="note-text">${esc(n.text)}</div><div class="note-footer"><span class="note-date">${fmtDate(n.date)}</span><button class="btn btn-icon" style="color:#374151;padding:1px 5px" onclick="deleteNote('${p.id}','${n.id}')">✕</button></div></div>`).join('')}
+        ${(p.notes||[]).map(n=>`
+          <div class="note-card">
+            <div class="note-text">${esc(n.text)}</div>
+            <div class="note-footer">
+              <span class="note-date">${fmtDate(n.date)}</span>
+              <button class="btn btn-icon" style="color:#374151;padding:1px 5px" onclick="deleteNote('${p.id}','${n.id}')">✕</button>
+            </div>
+          </div>`).join('')}
       </div>
     </div>`;
 }
@@ -361,17 +517,27 @@ function showNewProj(){
   if(document.getElementById('new-proj-form'))return;
   const form=document.createElement('div');form.className='new-proj-form';form.id='new-proj-form';
   const cats=getAllCats();
-  form.innerHTML=`<input class="input" id="new-proj-name" placeholder="ชื่อโปรเจกต์..." style="margin-bottom:6px"><input list="new-cat-list" class="input" id="new-proj-cat" placeholder="หมวดหมู่ (ถ้ามี)..." style="margin-bottom:6px"><datalist id="new-cat-list">${cats.map(c=>`<option value="${esc(c)}">`).join('')}</datalist><div class="chip-row">${Object.entries(STATUS).map(([k,v])=>`<button class="chip" id="sc-${k}" style="color:${v.color};border-color:${k==='active'?v.color:'#2d3748'};background:${k==='active'?v.bg:'transparent'}" onclick="selectStatus('${k}')">${v.label.slice(0,5)}</button>`).join('')}</div><div class="chip-row">${Object.entries(PRIORITY).map(([k,v])=>`<button class="chip" id="pc-${k}" style="color:${v.color};border-color:${k==='mid'?v.color:'#2d3748'}" onclick="selectPriority('${k}')">${v.label}</button>`).join('')}</div><div style="display:flex;gap:6px;margin-top:6px"><button class="btn btn-primary" style="flex:1;font-size:11px" onclick="confirmNewProj()">เพิ่ม</button><button class="btn" style="flex:1;font-size:11px" onclick="cancelNewProj()">ยกเลิก</button></div>`;
-  list.prepend(form);document.getElementById('new-proj-name').focus();window._s='active';window._pr='mid';
+  form.innerHTML=`
+    <input class="input" id="new-proj-name" placeholder="ชื่อโปรเจกต์..." style="margin-bottom:6px">
+    <input list="new-cat-list" class="input" id="new-proj-cat" placeholder="หมวดหมู่ (ถ้ามี)..." style="margin-bottom:6px">
+    <datalist id="new-cat-list">${cats.map(c=>`<option value="${esc(c)}">`).join('')}</datalist>
+    <div class="chip-row">${Object.entries(STATUS).map(([k,v])=>`<button class="chip" id="sc-${k}" style="color:${v.color};border-color:${k==='active'?v.color:'#2d3748'};background:${k==='active'?v.bg:'transparent'}" onclick="selectStatus('${k}')">${v.label.slice(0,5)}</button>`).join('')}</div>
+    <div class="chip-row">${Object.entries(PRIORITY).map(([k,v])=>`<button class="chip" id="pc-${k}" style="color:${v.color};border-color:${k==='mid'?v.color:'#2d3748'}" onclick="selectPriority('${k}')">${v.label}</button>`).join('')}</div>
+    <div style="display:flex;gap:6px;margin-top:6px">
+      <button class="btn btn-primary" style="flex:1;font-size:11px" onclick="confirmNewProj()">เพิ่ม</button>
+      <button class="btn" style="flex:1;font-size:11px" onclick="cancelNewProj()">ยกเลิก</button>
+    </div>`;
+  list.prepend(form);
+  document.getElementById('new-proj-name').focus();
+  window._s='active';window._pr='mid';
   document.getElementById('new-proj-name').addEventListener('keydown',e=>{if(e.key==='Enter')confirmNewProj();});
 }
 window.selectStatus=k=>{window._s=k;Object.keys(STATUS).forEach(s=>{const b=document.getElementById('sc-'+s);if(!b)return;b.style.borderColor=s===k?STATUS[s].color:'#2d3748';b.style.background=s===k?STATUS[s].bg:'transparent';});};
 window.selectPriority=k=>{window._pr=k;Object.keys(PRIORITY).forEach(s=>{const b=document.getElementById('pc-'+s);if(!b)return;b.style.borderColor=s===k?PRIORITY[s].color:'#2d3748';});};
 window.confirmNewProj=()=>{
   const name=document.getElementById('new-proj-name')?.value?.trim();if(!name)return;
-  const cat=document.getElementById('new-proj-cat')?.value?.trim()||'';
-  // ── ป้องกัน duplicate ชื่อ ──
   if(projects.some(p=>p.name.trim()===name)){alert('มีโปรเจกต์ชื่อนี้อยู่แล้วครับ');return;}
+  const cat=document.getElementById('new-proj-cat')?.value?.trim()||'';
   const p={id:genId(),name,status:window._s||'active',priority:window._pr||'mid',category:cat,notes:[],tasks:[],createdAt:today()};
   projects.unshift(p);selectedId=p.id;document.getElementById('new-proj-form')?.remove();scheduleSave();renderAll();
 };
@@ -396,7 +562,7 @@ function runTool(name,input){
   let result='',actionDesc=null;
   if(name==='get_all_projects'){result=JSON.stringify(projects);}
   else if(name==='create_project'){
-    if(projects.some(p=>p.name.trim()===input.name.trim())){result=JSON.stringify({error:'duplicate name'});return{result,actionDesc};}
+    if(projects.some(p=>p.name.trim()===input.name.trim())){result=JSON.stringify({error:'duplicate'});return{result,actionDesc};}
     const p={id:genId(),name:input.name,status:input.status||'active',priority:input.priority||'mid',category:input.category||'',notes:[],tasks:[],createdAt:today()};
     projects.unshift(p);result=JSON.stringify({ok:true,project:p});actionDesc=`สร้าง "${p.name}"`;
   }
@@ -418,7 +584,7 @@ window.sendAI=async()=>{
   inp.value='';setAILoading(true);showActions([]);
   addBubble('user',text);aiHistory.push({role:'user',content:text});
   const SYSTEM=`คุณคือเลขาโปรเจกต์ของ Kit ผู้ดูแลธุรกิจช็อกโกแลต Maaklai และร้าน 32Bar
-มี tools สำหรับอ่านและแก้ไขข้อมูลโปรเจกต์โดยตรง รวมถึง category
+มี tools สำหรับอ่านและแก้ไขข้อมูลโปรเจกต์โดยตรง รวมถึง category และ priority
 กฎ: ก่อนตอบสรุปให้ get_all_projects ก่อน · ใช้ tool เลยไม่ต้องถาม · ห้ามสร้างโปรเจกต์ซ้ำชื่อเดิม · ยืนยันสิ่งที่ทำ · ตอบภาษาไทย กระชับ`;
   const toApi=h=>h.map(m=>({role:m.role,content:Array.isArray(m.content)?m.content:m.content}));
   const actions=[];let loadingBubble=null;
@@ -428,11 +594,7 @@ window.sendAI=async()=>{
       const data=await res.json();
       const content=data.content||[],toolBlocks=content.filter(b=>b.type==='tool_use'),textBlocks=content.filter(b=>b.type==='text');
       aiHistory.push({role:'assistant',content});
-      if(!toolBlocks.length||data.stop_reason==='end_turn'){
-        const txt=textBlocks.map(b=>b.text).join('\n').trim();
-        loadingBubble?.remove();loadingBubble=null;
-        addBubble('assistant',txt||'เสร็จแล้วครับ');break;
-      }
+      if(!toolBlocks.length||data.stop_reason==='end_turn'){loadingBubble?.remove();loadingBubble=null;addBubble('assistant',textBlocks.map(b=>b.text).join('\n').trim()||'เสร็จแล้วครับ');break;}
       if(!loadingBubble)loadingBubble=addBubble('loading-bubble','กำลังดำเนินการ...');
       const toolResults=[];
       for(const tb of toolBlocks){const{result,actionDesc}=runTool(tb.name,tb.input);if(actionDesc)actions.push(actionDesc);toolResults.push({type:'tool_result',tool_use_id:tb.id,content:result});}
